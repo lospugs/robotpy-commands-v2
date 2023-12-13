@@ -9,7 +9,7 @@ import wpimath.controller as controller
 import wpimath.trajectory as trajectory
 import wpimath.geometry as geometry
 import wpimath.kinematics as kinematics
-from wpimath.trajectory import TrapezoidProfile as DimensionlessProfile
+from commands2 import TrapezoidProfile as DimensionlessProfile
 from wpimath.trajectory import TrapezoidProfileRadians as RadiansProfile
 
 from wpilib import Timer
@@ -29,7 +29,9 @@ class TrapezoidProfileRadiansFixture:
         constraints: RadiansProfile.Constraints = RadiansProfile.Constraints(
             3 * math.pi, math.pi
         )
-        self._profile: RadiansProfile = RadiansProfile(constraints)
+        self._profile: DimensionlessProfile[
+            RadiansProfile.Constraints, RadiansProfile.State
+        ] = DimensionlessProfile(constraints)
         self._goal_state = RadiansProfile.State(3, 0)
 
         self._state = self._profile.calculate(
@@ -58,7 +60,9 @@ class TrapezoidProfileFixture:
         constraints: DimensionlessProfile.Constraints = (
             DimensionlessProfile.Constraints(3 * math.pi, math.pi)
         )
-        self._profile: DimensionlessProfile = DimensionlessProfile(constraints)
+        self._profile: DimensionlessProfile[
+            DimensionlessProfile.State
+        ] = DimensionlessProfile(constraints)
         self._goal_state = DimensionlessProfile.State(3, 0)
 
         self._state = self._profile.calculate(
@@ -90,9 +94,7 @@ def test_trapezoidProfileDimensionless(
 
         fixture_data = get_trapezoid_profile_dimensionless
 
-        command = commands2.TrapezoidProfileCommand[
-            DimensionlessProfile, DimensionlessProfile.State
-        ](
+        command = commands2.TrapezoidProfileCommand[DimensionlessProfile.State](
             fixture_data._profile,
             fixture_data.profileOutput,
             fixture_data.getGoal,
@@ -122,9 +124,7 @@ def test_trapezoidProfileRadians(
 
         fixture_data = get_trapezoid_profile_radians
 
-        command = commands2.TrapezoidProfileCommand[
-            RadiansProfile, RadiansProfile.State
-        ](
+        command = commands2.TrapezoidProfileCommand[RadiansProfile.State](
             fixture_data._profile,
             fixture_data.profileOutput,
             fixture_data.getGoal,

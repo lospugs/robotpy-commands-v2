@@ -14,20 +14,17 @@ from .subsystem import Subsystem
 # Defined two generic types for the Profile and ProfileState variables.
 # This allows an implementation for both dimensionless and Radians
 # instances of TrapezoidProfiles (or any future dimension as well)
-TP = TypeVar("TP")  # Generic[TrapezoidProfile]
 TS = TypeVar("TS")  # Generic[TrapezoidProfile.State]
 
 
-class TrapezoidProfileCommand(Command, Generic[TP, TS]):
+class TrapezoidProfileCommand(Command, Generic[TS]):
     """
     A command that runs a :class:`.TrapezoidProfile`. Useful for smoothly controlling mechanism motion.
-
-    This class is provided by the NewCommands VendorDep
     """
 
     def __init__(
         self,
-        profile: TP,
+        profile: TrapezoidProfile,
         output: Callable[[TS], Any],
         getGoal: Callable[[], TS],
         getCurrent: Callable[[], TS],
